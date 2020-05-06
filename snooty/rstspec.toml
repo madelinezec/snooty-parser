@@ -381,6 +381,19 @@ inherit = "_guides-base"
 help = """Related pages. Typically a list."""
 inherit = "_guides-base"
 
+[directive._openapi-base]
+required_context = "openapi"
+
+[directive.operation]
+inherit = "_openapi-base"
+content_type = "block"
+options.hash = "string"
+options.method = "string"
+options.path = "string"
+
+[role.required]
+type = "explicit_title"
+
 ###### DevHub
 [directive._devhub-base]
 required_context = "devhub"

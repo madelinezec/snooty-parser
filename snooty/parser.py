@@ -22,6 +22,7 @@ import networkx
 from . import n, gizaparser, rstparser, util
 from .gizaparser.nodes import GizaCategory
 from .gizaparser.published_branches import PublishedBranches, parse_published_branches
+from .gizaparser.openapi import OpenAPI
 from .postprocess import DevhubPostprocessor, Postprocessor
 from .util import RST_EXTENSIONS
 from .types import (
@@ -579,6 +580,7 @@ class JSONVisitor:
                     or fileid.match("option/*.rst")
                     or fileid.match("toc/*.rst")
                     or fileid.match("apiargs/*.rst")
+                    or fileid.match("openapi*.rst")
                     or fileid == FileId("includes/hash.rst")
                 ):
                     pass
@@ -982,6 +984,29 @@ class _Project:
             prefix = get_giza_category(path)
             if prefix in self.yaml_mapping:
                 categorized[prefix].append(path)
+            elif "openapi" in path.as_posix():
+                with open(path, "r") as f:
+                    openapi = OpenAPI.load(f)
+
+                def create_page(filename: str) -> Tuple[Page, EmbeddedRstParser]:
+                    text, _ = self.config.read(path)
+                    page = Page.create(
+                        path, filename, text, n.Root((-1,), [], {})
+                    )
+                    return (
+                        page,
+                        EmbeddedRstParser(
+                            self.config,
+                            page,
+                            all_yaml_diagnostics.setdefault(path, []),
+                        ),
+                    )
+
+                openapi_pages: List[Page] = openapi.to_pages(path, create_page)
+
+                for page in openapi_pages:
+                    self._page_updated(page, [])
+
 
         # Initialize our YAML file registry
         for prefix, giza_category in self.yaml_mapping.items():
