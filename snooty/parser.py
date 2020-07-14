@@ -195,6 +195,9 @@ class JSONVisitor:
                 (line,), [], node["domain"], role_name, node["target"], flag, None, None
             )
             self.state.append(role)
+            print("in the parser.py")
+            print(node)
+            print('\n')
             return
         elif isinstance(node, rstparser.role):
             role_name = node["name"]
@@ -369,6 +372,7 @@ class JSONVisitor:
                 target = n.InlineTarget(item.start, [], "std", "term", None)
                 target.children = [identifier]
                 item.term.append(target)
+            print(popped)
 
     def handle_directive(
         self, node: docutils.nodes.Node, line: int

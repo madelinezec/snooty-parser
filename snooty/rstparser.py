@@ -323,7 +323,7 @@ class RefRoleHandler:
 
         if flag:
             node["flag"] = flag
-
+        #print(node)
         return [node], []
 
 
@@ -362,7 +362,7 @@ class LinkRoleHandler:
 
         if self.format:
             node = format_node(node, self.format)
-
+        #print(node)
         return [node], []
 
 
@@ -569,7 +569,7 @@ class BaseCardGroupDirective(BaseDocutilsDirective):
 
         for child in loaded.cards:
             node.append(self.make_card_node(source, child))
-
+        #print(node)
         return [node]
 
     def make_card_node(self, source: str, child: CardDefinition) -> docutils.nodes.Node:
@@ -647,7 +647,7 @@ class BaseTabsDirective(BaseDocutilsDirective):
 
             for child in loaded.tabs:
                 node.append(self.make_tab_node(child.id, child.name, source, child))
-
+            #print(node)
             return [node]
 
         # The new syntax needs no special handling beyond a little fixing up
@@ -687,7 +687,7 @@ class BaseTabsDirective(BaseDocutilsDirective):
             node,
             match_titles=True,
         )
-
+        #print(node)
         return node
 
 
@@ -716,6 +716,7 @@ class BaseCodeDirective(docutils.parsers.rst.Directive):
         node["linenos"] = linenos
         node.document = self.state.document
         node.source, node.line = source, line
+        #print(node)
         return [node]
 
 

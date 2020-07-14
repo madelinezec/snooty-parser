@@ -232,6 +232,7 @@ class Postprocessor:
 
         If so, append the full URL to the AST node. If not, throw an error.
         """
+
         if not isinstance(node, n.RefRole):
             return
         key = f"{node.domain}:{node.name}"
@@ -252,6 +253,7 @@ class Postprocessor:
                 TargetNotFound(node.name, node.target, line)
             )
             return
+
 
         if len(target_candidates) > 1:
             line = node.span[0]
@@ -379,6 +381,17 @@ class Postprocessor:
             self.targets.define_local_target(
                 node.domain, node.name, target_ids, filename, title
             )
+        print('in handle_target: ')
+        for child in node.children:
+          print(child)
+        
+        if(len(node.children) == 4):
+          print("the babies: ")
+          for child in node.children[3].children:
+            print(child)
+        print("the mama")
+        print(node)
+        print('\n\n')
 
     def populate_include_nodes(self, filename: FileId, node: n.Node) -> None:
         """Iterate over all pages to find include directives. When found, replace their
